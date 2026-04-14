@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cost of a Cup — Valencia is Coffee · Rafael Maggion</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f0e8; color: #1a1a1a; }
+h1 { font-size: 13px; font-weight: 600; text-align: center; padding: 12px; color: #555; letter-spacing: .05em; text-transform: uppercase; border-bottom: 1px solid #e0deda; background: #fff; }
+.wrap { display: grid; grid-template-columns: 320px 1fr; gap: 28px; padding: 1.2rem; max-width: 1100px; margin: 0 auto; }
+.cup-section { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.legend { width: 100%; }
+.legend-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 13px; color: #555; border-bottom: 1px solid #e8e4dc; }
+.legend-row:last-child { border-bottom: none; }
+.legend-group { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: #999; padding: 8px 0 3px; }
+.legend-note { font-size: 11px; color: #2d6a4f; padding: 4px 0 6px; font-style: italic; }
+.swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+.legend-label { flex: 1; }
+.legend-val { font-weight: 600; color: #1a1a1a; font-size: 13px; min-width: 48px; text-align: right; }
+.right { display: flex; flex-direction: column; gap: 14px; }
+.section-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #999; margin-bottom: 6px; }
+.slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+.slider-row label { font-size: 13px; color: #555; width: 185px; flex-shrink: 0; }
+.slider-row input[type=range] { flex: 1; accent-color: #1a1a1a; }
+.slider-row .val { font-size: 13px; font-weight: 600; color: #1a1a1a; min-width: 58px; text-align: right; }
+.metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+.metric { background: #fff; border: 1px solid #e0deda; border-radius: 6px; padding: 9px 11px; }
+.metric .mlabel { font-size: 10px; color: #999; margin-bottom: 3px; text-transform: uppercase; letter-spacing: .04em; }
+.metric .mval { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+.metric .mval.neg { color: #b33a3a; }
+.metric .mval.pos { color: #2d6a4f; }
+hr { border: none; border-top: 1px solid #e0deda; }
+.scenario-btns { display: flex; flex-wrap: wrap; gap: 7px; }
+.scenario-btns button { font-size: 12px; padding: 5px 12px; cursor: pointer; border: 1px solid #ccc; background: #fff; color: #1a1a1a; border-radius: 5px; transition: all .15s; }
+.scenario-btns button:hover { background: #f0ede8; }
+.scenario-btns button.on-dark   { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+.scenario-btns button.on-red    { background: #b33a3a; color: #fff; border-color: #b33a3a; }
+.scenario-btns button.on-purple { background: #5b3a8c; color: #fff; border-color: #5b3a8c; }
+.scenario-btns button.on-green  { background: #2d6a4f; color: #fff; border-color: #2d6a4f; }
+.scenario-btns button.on-gold   { background: #8c6d2f; color: #fff; border-color: #8c6d2f; }
+.cup-footer { display:flex; justify-content:center; align-items:baseline; gap:24px; width:100%; padding-top:4px; }
+.cup-stat { text-align:center; }
+.cup-stat .cs-label { font-size:10px; color:#999; text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px; }
+.cup-stat .cs-val { font-size:22px; font-weight:700; }
+.cup-stat .cs-val.neg { color:#b33a3a; }
+.cup-stat .cs-val.pos { color:#2d6a4f; }
+.cup-stat .cs-val.neutral { color:#1a1a1a; }
+.cup-divider { width:1px; height:32px; background:#e0deda; }
+.credit { text-align:center; font-size:11px; color:#aaa; padding: 12px; border-top: 1px solid #e0deda; background:#fff; margin-top: 1rem;}
+@media (max-width: 700px) {
+  .wrap { grid-template-columns: 1fr; }
+  .cup-section svg { max-width: 260px; }
+}
+</style>
+</head>
+<body>
+<h1>☕ Cost of a Cup — Valencia is Coffee · Rafael Maggion</h1>
+
+<div class="wrap">
+  <div class="cup-section">
+    <svg id="cupSvg" viewBox="0 0 340 380" width="300" style="width:100%;max-width:300px" role="img" aria-label="Coffee cup with cost layers">
+      <defs><clipPath id="cupClip"><path d="M52,68 L36,352 Q36,368 54,368 L286,368 Q304,368 304,352 L288,68 Z"/></clipPath></defs>
+      <g id="fillLayers" clip-path="url(#cupClip)"></g>
+      <path d="M52,68 L36,352 Q36,368 54,368 L286,368 Q304,368 304,352 L288,68 Z" fill="none" stroke="#ccc" stroke-width="2.5"/>
+      <ellipse cx="170" cy="68" rx="118" ry="17" fill="#f5f0e8" stroke="#ccc" stroke-width="2.5"/>
+      <path d="M304,158 Q356,158 356,228 Q356,298 304,298" fill="none" stroke="#ccc" stroke-width="2.5"/>
+      <g id="layerLabels"></g>
+    </svg>
+    <div class="cup-footer">
+      <div class="cup-stat"><div class="cs-label">selling price</div><div class="cs-val neutral" id="cs-price">€0.00</div></div>
+      <div class="cup-divider"></div>
+      <div class="cup-stat"><div class="cs-label">margin / cup</div><div class="cs-val" id="cs-margin">€0.00</div></div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <div class="right">
+    <div>
+      <div class="section-title">Toggle modifiers — stack freely</div>
+      <div class="scenario-btns">
+        <button id="btn-weekdays"   onclick="toggleMod('weekdays')">Weekdays only</button>
+        <button id="btn-nostaff"    onclick="toggleMod('nostaff')">Remove staff</button>
+        <button id="btn-layoff"     onclick="toggleMod('layoff')">+ Layoff cost</button>
+        <button id="btn-notraspaso" onclick="toggleMod('notraspaso')">No traspaso</button>
+        <button id="btn-morefood"   onclick="toggleMod('morefood')">More food (60%)</button>
+        <button id="btn-premium"    onclick="toggleMod('premium')">Premium €3.20</button>
+      </div>
+    </div>
+    <hr>
+    <div>
+      <div class="section-title">Coffee</div>
+      <div class="slider-row"><label>Selling price (incl. IVA)</label><input type="range" id="sl-price" min="1.50" max="5.00" step="0.10" value="2.20"><span class="val" id="vl-price">€2.20</span></div>
+      <div class="slider-row"><label>Daily cups sold</label><input type="range" id="sl-cups" min="30" max="300" step="5" value="105"><span class="val" id="vl-cups">105</span></div>
+    </div>
+    <div>
+      <div class="section-title">Food</div>
+      <div class="slider-row"><label>Food items per day</label><input type="range" id="sl-food-qty" min="0" max="150" step="5" value="25"><span class="val" id="vl-food-qty">25</span></div>
+      <div class="slider-row"><label>Avg food price (€, incl. IVA)</label><input type="range" id="sl-foodprice" min="2" max="12" step="0.50" value="4.50"><span class="val" id="vl-foodprice">€4.50</span></div>
+    </div>
+    <div>
+      <div class="section-title">Coffee bags (250g)</div>
+      <div class="slider-row"><label>Bags sold per day</label><input type="range" id="sl-bags" min="0" max="10" step="1" value="1"><span class="val" id="vl-bags">1</span></div>
+      <div class="slider-row"><label>Bean price per kg (€)</label><input type="range" id="sl-kgprice" min="15" max="40" step="1" value="23"><span class="val" id="vl-kgprice">€23</span></div>
+    </div>
+    <hr>
+    <div>
+      <div class="section-title">Fixed costs</div>
+      <div class="slider-row"><label>Monthly rent (€)</label><input type="range" id="sl-rent" min="500" max="5000" step="100" value="2000"><span class="val" id="vl-rent">€2,000</span></div>
+      <div class="slider-row"><label>Staff cost/month (€)</label><input type="range" id="sl-staff" min="0" max="8000" step="100" value="2100"><span class="val" id="vl-staff">€2,100</span></div>
+      <div class="slider-row"><label>Owner salary/month (€)</label><input type="range" id="sl-owner" min="0" max="4000" step="100" value="1800"><span class="val" id="vl-owner">€1,800</span></div>
+      <div class="slider-row"><label>Traspaso capex (€)</label><input type="range" id="sl-traspaso" min="0" max="80000" step="1000" value="40000"><span class="val" id="vl-traspaso">€40,000</span></div>
+    </div>
+    <hr>
+    <div>
+      <div class="section-title">Per cup summary</div>
+      <div class="metrics">
+        <div class="metric"><div class="mlabel">Coffee net price</div><div class="mval" id="m-coffprice">€0.00</div></div>
+        <div class="metric"><div class="mlabel">Coffee var cost</div><div class="mval" id="m-var">€0.00</div></div>
+        <div class="metric"><div class="mlabel">Food+bag relief</div><div class="mval pos" id="m-relief">€0.00</div></div>
+        <div class="metric"><div class="mlabel">Eff. fixed/cup</div><div class="mval" id="m-fixed">€0.00</div></div>
+        <div class="metric"><div class="mlabel">Margin/cup</div><div class="mval" id="m-margin">€0.00</div></div>
+        <div class="metric"><div class="mlabel">Monthly EBITDA</div><div class="mval" id="m-ebitda">€0</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="credit">Built for Valencia is Coffee 2025 · Rafael Maggion · My Coffee Awards · Coffee Guide Project · Oatly</p>
+
+<script>
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const TOP_Y=68,BOT_Y=352,CUP_H=BOT_Y-TOP_Y,TOP_W=236,BOT_W=268,CX=170;
+const COLORS={beans:'#C45C00',milk:'#E8A020',pkg:'#2980B9',sweet:'#27AE60',water:'#16A085',waste:'#7F8C8D',fixed:'#8E44AD',amort:'#D35400',pos:'#2D6A4F',neg:'#B33A3A'};
+const MOD_COLORS={weekdays:'on-dark',nostaff:'on-red',layoff:'on-red',notraspaso:'on-purple',morefood:'on-green',premium:'on-gold'};
+const mods={weekdays:false,nostaff:false,layoff:false,notraspaso:false,morefood:false,premium:false};
+
+function toggleMod(key){
+  mods[key]=!mods[key];
+  const btn=document.getElementById('btn-'+key);
+  if(mods[key])btn.classList.add(MOD_COLORS[key]);
+  else btn.classList.remove(MOD_COLORS[key]);
+  update();
+}
+function getBase(){
+  return{price:parseFloat(document.getElementById('sl-price').value),cups:parseInt(document.getElementById('sl-cups').value),foodQty:parseInt(document.getElementById('sl-food-qty').value),foodPrice:parseFloat(document.getElementById('sl-foodprice').value),bags:parseInt(document.getElementById('sl-bags').value),kgPrice:parseFloat(document.getElementById('sl-kgprice').value),rent:parseInt(document.getElementById('sl-rent').value),staff:parseInt(document.getElementById('sl-staff').value),owner:parseInt(document.getElementById('sl-owner').value),traspaso:parseInt(document.getElementById('sl-traspaso').value)};
+}
+function applyMods(v){
+  const r=Object.assign({},v);
+  r.days=mods.weekdays?260:310;
+  if(mods.nostaff)r.staff=0;
+  if(mods.notraspaso)r.traspaso=0;
+  if(mods.morefood)r.foodQty=Math.max(r.foodQty,Math.round(r.cups*0.60));
+  if(mods.premium)r.price=Math.max(r.price,3.20);
+  r.layoffAnnual=mods.layoff?r.staff*2:0;
+  return r;
+}
+function compute(v){
+  const cpm=v.days/12;
+  const beans=0.207,milk=0.272,pkg=0.066,sweet=0.040,water=0.020;
+  const varBase=beans+milk+pkg+sweet+water,waste=varBase*0.03,coffeeVar=varBase+waste;
+  const coffeeNet=v.price/1.1;
+  const foodNet=v.foodPrice/1.1,foodGM=foodNet*0.70;
+  const bagNet=(v.kgPrice/2)/1.1,bagGM=bagNet-v.kgPrice*0.35;
+  const cups=v.cups*cpm,food=v.foodQty*cpm,bags=v.bags*cpm;
+  const otherFixed=420+90+120+110+200+130+60+200;
+  const totalFixed=v.rent+v.staff+v.owner+otherFixed;
+  const capex=12000+1800+1500+2500+25000+3000+2000+v.traspaso;
+  const amort=capex/(9*12),layoff=(v.layoffAnnual||0)/12;
+  const overhead=totalFixed+amort+layoff;
+  const reliefRaw=(food*foodGM+bags*bagGM)/cups;
+  const relief=Math.min(reliefRaw,overhead/cups);
+  const grossFixed=overhead/cups,effFixed=Math.max(0,grossFixed-relief);
+  const amortFrac=amort/overhead,effAmort=effFixed*amortFrac,effOther=effFixed-effAmort;
+  const margin=coffeeNet-coffeeVar-effFixed;
+  const rev=(cups*coffeeNet+food*foodNet+bags*bagNet)-( cups*coffeeVar+food*foodNet*0.30+bags*v.kgPrice*0.35);
+  const ebitda=rev-overhead;
+  return{coffeeNet,coffeeVar,beans,milk,pkg,sweet,water,waste,bagGM,relief,effFixed,effOther,effAmort,margin,ebitda};
+}
+function drawLayer(fillG,labelG,y1,y2,color,labelText,pinBottom){
+  const t1=(y1-TOP_Y)/CUP_H,t2=(y2-TOP_Y)/CUP_H;
+  const w1=TOP_W+(BOT_W-TOP_W)*t1,w2=TOP_W+(BOT_W-TOP_W)*t2;
+  const path=document.createElementNS(SVG_NS,'path');
+  path.setAttribute('d',`M${CX-w1/2},${y1} L${CX-w2/2},${y2} L${CX+w2/2},${y2} L${CX+w1/2},${y1} Z`);
+  path.setAttribute('fill',color);
+  fillG.appendChild(path);
+  const h=y2-y1;
+  if(labelText&&h>=10){
+    const labelY=pinBottom?y2-8:(y1+y2)/2+4.5;
+    const txt=document.createElementNS(SVG_NS,'text');
+    txt.setAttribute('x',String(CX));txt.setAttribute('y',String(labelY));
+    txt.setAttribute('text-anchor','middle');txt.setAttribute('font-family','system-ui,sans-serif');
+    txt.setAttribute('font-size',h>=20?'12':'10');txt.setAttribute('font-weight','600');
+    txt.setAttribute('fill','#fff');txt.textContent=labelText;
+    labelG.appendChild(txt);
+  }
+}
+function renderCup(data,sellPrice){
+  const fillG=document.getElementById('fillLayers'),labelG=document.getElementById('layerLabels');
+  fillG.innerHTML='';labelG.innerHTML='';
+  const totalCost=data.coffeeVar+data.effFixed;
+  const scale=Math.max(data.coffeeNet,totalCost);
+  const layers=[{val:data.beans,c:COLORS.beans},{val:data.milk,c:COLORS.milk},{val:data.pkg,c:COLORS.pkg},{val:data.sweet,c:COLORS.sweet},{val:data.water,c:COLORS.water},{val:data.waste,c:COLORS.waste},{val:data.effOther,c:COLORS.fixed},{val:data.effAmort,c:COLORS.amort}];
+  let cumY=BOT_Y;
+  layers.forEach(layer=>{
+    if(layer.val<0.001)return;
+    const h=(layer.val/scale)*CUP_H;
+    if(h<1)return;
+    const y1=cumY-h,y2=cumY;
+    drawLayer(fillG,labelG,y1,y2,layer.c,h>=10?'€'+layer.val.toFixed(2):null,false);
+    cumY=y1;
+  });
+  if(data.margin>0.001){
+    const h=(data.margin/scale)*CUP_H;
+    if(h>=1){const y1=cumY-h,y2=cumY;drawLayer(fillG,labelG,y1,y2,COLORS.pos,h>=10?'€'+data.margin.toFixed(2):null,true);}
+  }
+  document.getElementById('cs-price').textContent='€'+sellPrice.toFixed(2);
+  const mEl=document.getElementById('cs-margin');
+  mEl.textContent=(data.margin<0?'−':'')+'€'+Math.abs(data.margin).toFixed(2);
+  mEl.className='cs-val '+(data.margin>=0?'pos':'neg');
+}
+function renderLegend(data,v){
+  const items=[{c:COLORS.beans,l:'Coffee beans',val:data.beans},{c:COLORS.milk,l:'Milk blend',val:data.milk},{c:COLORS.pkg,l:'Packaging',val:data.pkg},{c:COLORS.sweet,l:'Sweeteners',val:data.sweet},{c:COLORS.water,l:'Water & utilities',val:data.water},{c:COLORS.waste,l:'Waste 3%',val:data.waste},null,{c:COLORS.fixed,l:'Fixed overhead/cup (eff.)',val:data.effOther},{c:COLORS.amort,l:'Amortisation/cup (eff.)',val:data.effAmort},{c:'#C45C00',l:'Food+bag relief/cup',val:-data.relief,isRelief:true},null,{c:data.margin>=0?COLORS.pos:COLORS.neg,l:data.margin>=0?'Margin/cup':'Deficit/cup',val:data.margin,bold:true}].filter(i=>i===null||(Math.abs(i.val)>0.0005||i.bold));
+  let html='';
+  items.forEach(item=>{
+    if(!item){html+='<div class="legend-group">fixed costs</div>';return;}
+    const sign=item.isRelief?'−':(item.bold&&item.val<0?'−':'');
+    const boldStyle=item.bold?'font-weight:700;color:#1a1a1a':'';
+    html+=`<div class="legend-row" style="${boldStyle}"><span class="swatch" style="background:${item.c}"></span><span class="legend-label">${item.l}</span><span class="legend-val">${sign}€${Math.abs(item.val).toFixed(2)}</span></div>`;
+  });
+  html+=`<div class="legend-group" style="margin-top:6px">bags (250g) — sell €${(v.kgPrice/2).toFixed(2)} · cost €${(v.kgPrice*0.35).toFixed(2)} · gm €${data.bagGM.toFixed(2)}</div>`;
+  document.getElementById('legend').innerHTML=html;
+}
+function renderMetrics(data){
+  const set=(id,val,fmt,cls)=>{const el=document.getElementById(id);el.textContent=fmt(val);el.className='mval';el.classList.add(cls||(val<0?'neg':'pos'));};
+  document.getElementById('m-coffprice').textContent='€'+data.coffeeNet.toFixed(2);
+  document.getElementById('m-coffprice').className='mval';
+  set('m-var',data.coffeeVar,v=>'€'+v.toFixed(2),'neg');
+  set('m-relief',data.relief,v=>'€'+v.toFixed(2),'pos');
+  set('m-fixed',data.effFixed,v=>'€'+v.toFixed(2),data.effFixed>0?'neg':'pos');
+  set('m-margin',data.margin,v=>(v<0?'−':'')+'€'+Math.abs(v).toFixed(2));
+  document.getElementById('m-ebitda').textContent=(data.ebitda<0?'−':'')+'€'+Math.round(Math.abs(data.ebitda)).toLocaleString();
+  document.getElementById('m-ebitda').className='mval '+(data.ebitda>=0?'pos':'neg');
+}
+function update(){const base=getBase(),v=applyMods(base),data=compute(v);renderCup(data,v.price);renderLegend(data,v);renderMetrics(data);}
+function syncLabels(){
+  document.getElementById('vl-price').textContent='€'+parseFloat(document.getElementById('sl-price').value).toFixed(2);
+  document.getElementById('vl-cups').textContent=document.getElementById('sl-cups').value;
+  document.getElementById('vl-food-qty').textContent=document.getElementById('sl-food-qty').value;
+  document.getElementById('vl-foodprice').textContent='€'+parseFloat(document.getElementById('sl-foodprice').value).toFixed(2);
+  document.getElementById('vl-bags').textContent=document.getElementById('sl-bags').value;
+  document.getElementById('vl-kgprice').textContent='€'+parseInt(document.getElementById('sl-kgprice').value);
+  document.getElementById('vl-rent').textContent='€'+parseInt(document.getElementById('sl-rent').value).toLocaleString();
+  document.getElementById('vl-staff').textContent='€'+parseInt(document.getElementById('sl-staff').value).toLocaleString();
+  document.getElementById('vl-owner').textContent='€'+parseInt(document.getElementById('sl-owner').value).toLocaleString();
+  document.getElementById('vl-traspaso').textContent='€'+parseInt(document.getElementById('sl-traspaso').value).toLocaleString();
+}
+['sl-price','sl-cups','sl-food-qty','sl-foodprice','sl-bags','sl-kgprice','sl-rent','sl-staff','sl-owner','sl-traspaso'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',()=>{syncLabels();update();});
+});
+syncLabels();update();
+</script>
+</body>
+</html>
